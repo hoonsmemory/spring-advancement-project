@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component //싱글톤으로 사용하기 위해 스프링 빈으로 등록한다. 컴포넌트 스캔의 대상이 된다.
-public class HelloTraceV1 {
+public class HelloTraceV2 {
 
     //로그의 레벨을 나타낸다.
     private static final String START_PREFIX = "-->";
@@ -27,6 +27,18 @@ public class HelloTraceV1 {
        return new TraceStatus(traceId, startTimeMs, message);
     }
 
+
+    public TraceStatus beginSync(TraceId beforeTraceId, String message) {
+        TraceId nextId = beforeTraceId.createNextId(); // 레벨 증가
+        Long startTimeMs = System.currentTimeMillis();
+
+        //트랜잭션 ID, 트랜잭션 lever, 실행중인 메서드
+        log.info("[{}] {}{}", nextId.getId(), addSpace(START_PREFIX, nextId.getLevel()), message);
+
+        //로그 출력(상태 반환)
+        return new TraceStatus(nextId, startTimeMs, message);
+    }
+
     //로그의 종료.
     public void end(TraceStatus status) {
         complete(status, null);
@@ -44,11 +56,9 @@ public class HelloTraceV1 {
         long resultTimeMs = stopTimeMs - status.getStartTimeMs();
         TraceId traceId = status.getTraceId();
         if (e == null) {
-            log.info("[{}] {}{} time={}ms", traceId.getId(),
-                    addSpace(COMPLETE_PREFIX, traceId.getLevel()), status.getMessage(), resultTimeMs);
+            log.info("[{}] {}{} time={}ms", traceId.getId(), addSpace(COMPLETE_PREFIX, traceId.getLevel()), status.getMessage(), resultTimeMs);
         } else {
-            log.info("[{}] {}{} time={}ms ex={}", traceId.getId(),
-                    addSpace(EX_PREFIX, traceId.getLevel()), status.getMessage(), resultTimeMs, e.toString());
+            log.info("[{}] {}{} time={}ms ex={}", traceId.getId(), addSpace(EX_PREFIX, traceId.getLevel()), status.getMessage(), resultTimeMs, e.toString());
         }
     }
 
