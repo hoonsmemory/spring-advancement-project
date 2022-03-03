@@ -13,7 +13,7 @@ public class HelloTraceV2Test {
         trace.end(status2);
         trace.end(status1);
     }
-
+  
     @Test
     void begin_exception(){
         HelloTraceV2 trace = new HelloTraceV2();
