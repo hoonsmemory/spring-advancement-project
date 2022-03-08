@@ -8,10 +8,8 @@ public class OrderServiceV1Impl implements OrderServiceV1 {
         this.orderRepository = orderRepository;
     }
 
-
     @Override
-    public String orderItem(String itemId) {
+    public void orderItem(String itemId) {
         orderRepository.save(itemId);
-        return itemId;
     }
 }

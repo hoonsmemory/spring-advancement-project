@@ -1,16 +1,22 @@
 package hello.proxy;
 
+import hello.advanced.trace.TraceStatus;
+import hello.advanced.trace.logtrace.LogTrace;
+import hello.advanced.trace.logtrace.ThreadLocalLogTrace;
 import hello.proxy.config.AppV1Config;
 import hello.proxy.config.AppV2Config;
+import hello.proxy.config.v1_proxy.InterfaceProxyConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
 /**
  *  클래스를 스프링 빈으로 등록한다. 여기서는 AppV1Config.class를 스프링 빈으로 등록한다.
  *  일반적으로 @Configuration 같은 설정 파일을 등록할 때 사용하지만, 스프링 빈을 등록할 때도 사용할 수 있다.
  */
-@Import({AppV1Config.class, AppV2Config.class})
+//@Import({AppV1Config.class, AppV2Config.class})
+@Import(InterfaceProxyConfig.class)
 /**
  * > @ComponentScan 의 기능과 같다. 컴포넌트 스캔을 시작할 위치를 지정한다.
  * 이 값을 설정하면 해당 패키지와 그 하위 패키지를 컴포넌트 스캔한다.
@@ -23,4 +29,8 @@ public class ProxyApplication {
 		SpringApplication.run(ProxyApplication.class, args);
 	}
 
+	@Bean
+	public LogTrace logTrace() {
+		return new ThreadLocalLogTrace();
+	}
 }
