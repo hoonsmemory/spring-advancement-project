@@ -9,8 +9,10 @@ import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.aop.support.NameMatchMethodPointcut;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 @Slf4j
+@Configuration
 public class ProxyFactoryConfigV1 {
 
     @Bean
@@ -58,6 +60,6 @@ public class ProxyFactoryConfigV1 {
         //advice
         LogTraceAdvice advice = new LogTraceAdvice(logTrace);
 
-        return new DefaultPointcutAdvisor(advice);
+        return new DefaultPointcutAdvisor(pointcut, advice);
     }
 }
