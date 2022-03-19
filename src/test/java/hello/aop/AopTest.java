@@ -1,8 +1,7 @@
 package hello.aop;
 
-import hello.proxy.ProxyApplication;
-import hello.proxy.app.v3.OrderRepositoryV3;
-import hello.proxy.app.v3.OrderServiceV3;
+import hello.aop.order.OrderRepository;
+import hello.aop.order.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -11,14 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @Slf4j
-@SpringBootTest(classes = ProxyApplication.class)//@SpringBootApplication 클래스를 찾을 수 있도록 클래스명 직접 입력
+@SpringBootTest(classes = AopApplication.class)//@SpringBootApplication 클래스를 찾을 수 있도록 클래스명 직접 입력
 public class AopTest {
 
     @Autowired
-    OrderServiceV3 orderService;
+    OrderService orderService;
 
     @Autowired
-    OrderRepositoryV3 orderRepository;
+    OrderRepository orderRepository;
 
     @Test
     void aopInfo() {
