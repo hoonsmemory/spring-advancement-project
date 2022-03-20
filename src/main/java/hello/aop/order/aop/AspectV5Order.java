@@ -9,6 +9,10 @@ import org.springframework.core.annotation.Order;
 @Slf4j
 public class AspectV5Order {
 
+    /**
+     * 어드바이스의 순서는 각각의 클래스별로 부여할 수 있다.
+     * 따라서 2개 이상의 어드바이스를 적용하기 위해서는 클래스를 2개 이상 만들어야한다.(내부 클래스로도 적용 가능)
+     */
     @Aspect
     @Order(2)
     public static class LogAspect{
