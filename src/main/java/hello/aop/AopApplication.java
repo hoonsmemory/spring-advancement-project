@@ -10,7 +10,8 @@ import org.springframework.context.annotation.Import;
 //@Import(AspectV2.class)
 //@Import(AspectV3.class)
 //@Import(AspectV4Pointcut.class)
-@Import({AspectV5Order.LogAspect.class, AspectV5Order.TxAspect.class})
+//@Import({AspectV5Order.LogAspect.class, AspectV5Order.TxAspect.class})
+@Import(AspectV6Advice.class)
 @SpringBootApplication(scanBasePackages = "hello.aop")
 public class AopApplication {
 
