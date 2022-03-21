@@ -103,4 +103,63 @@ public class ExecutionTest {
         pointcut.setExpression("execution(* hello.aop.*.*(..))");
         assertThat(pointcut.matches(helloMethod, MemberServiceImpl.class)).isFalse();
     }
+
+
+    @Test
+    void typeExactMatch() {
+        pointcut.setExpression("execution(* hello.aop.member.MemberServiceImpl.*(..)))");
+        assertThat(pointcut.matches(helloMethod, MemberServiceImpl.class)).isTrue();
+    }
+
+    /**
+     * 타입 매칭 : 부모 타입을 선언해도 적용된다.
+     * 단, 부모타입에서 선언된 메서드만 적용 가능
+     */
+    @Test
+    void typeMatchSuperType() {
+        pointcut.setExpression("execution(* hello.aop.member.MemberService.*(..)))");
+        assertThat(pointcut.matches(helloMethod, MemberServiceImpl.class)).isTrue();
+    }
+
+    @Test
+    void typeMatchNoSuperType() {
+        pointcut.setExpression("execution(* hello.aop.member.MemberService.internal(..)))");
+        assertThat(pointcut.matches(helloMethod, MemberServiceImpl.class)).isFalse();
+    }
+
+    /**
+     * 파라미터 매칭
+     */
+    @Test
+    void argsMatch() {
+        pointcut.setExpression("execution(* *(String))");
+        assertThat(pointcut.matches(helloMethod, MemberServiceImpl.class)).isTrue();
+    }
+
+    @Test
+    void argsMatchNoArgs() {
+        pointcut.setExpression("execution(* *())");
+        assertThat(pointcut.matches(helloMethod, MemberServiceImpl.class)).isFalse();
+    }
+
+    //하나의 파라미터 중 모든 타입
+    @Test
+    void argsMatchStar() {
+        pointcut.setExpression("execution(* *(*))");
+        assertThat(pointcut.matches(helloMethod, MemberServiceImpl.class)).isTrue();
+    }
+
+    //모든 파라미터
+    @Test
+    void argsMatchAll() {
+        pointcut.setExpression("execution(* *(..))");
+        assertThat(pointcut.matches(helloMethod, MemberServiceImpl.class)).isTrue();
+    }
+
+    //String 타입으로 시작한 모든 파라미터(String, xxx)
+    @Test
+    void argsMatchComplex() {
+        pointcut.setExpression("execution(* *(String, ..))");
+        assertThat(pointcut.matches(helloMethod, MemberServiceImpl.class)).isTrue();
+    }
 }
