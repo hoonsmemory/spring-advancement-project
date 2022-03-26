@@ -28,7 +28,7 @@ public class ProxyDITest {
         /**
          * hello.aop.member.MemberServiceImpl으로 넘어와야 하는데
          * com.sun.proxy.$Proxy62으로 넘어와 타입 예외가 발생(의존관계 주입 불가능)
-         * 따라서
+         * 따라서 부모타입인 인터페이스를 주입 받아야한다.
          */
         log.info("memberServiceImpl class = {}", memberServiceImpl.getClass());
         memberServiceImpl.hello("hello");
