@@ -35,9 +35,9 @@ Context 와 Strategy 를 한번 조립하고 나면 이후로는 Context 를 실
 그래서 전략을 실시간으로 변경해야 하면 차라리 이전에 개발한 테스트 코드 처럼 Context 를 하나더 생성하고 그곳에 다른 Strategy 를 주입하는 것이 더 나은 선택일 수 있다. 
 
 ### 템플릿 콜백 패턴
-￼
-
-콜백 정의 프로그래밍에서 콜백(callback) 또는 콜애프터 함수(call-after function)는 다른 코드의 인수로서 넘겨주는 실행 가능한 코드를 말한다. 
+![Template](https://user-images.githubusercontent.com/34621693/183362909-7610ce97-c1a8-43e5-acc9-e4d5f5962cf8.jpeg)
+콜백 정의
+<br/>프로그래밍에서 콜백(callback) 또는 콜애프터 함수(call-after function)는 다른 코드의 인수로서 넘겨주는 실행 가능한 코드를 말한다. 
 콜백을 넘겨받는 코드는 이 콜백을 필요에 따라 즉시 실행할 수도 있고, 아니면 나중에 실행할 수도 있다. 
 
 스프링에서는 JdbcTemplate , RestTemplate , TransactionTemplate , RedisTemplate 처럼 다양한 템플릿 콜백 패턴이 사용된다. 
@@ -70,13 +70,13 @@ Context 와 Strategy 를 한번 조립하고 나면 이후로는 Context 를 실
 
 
 ### 프록시 패턴
-￼
+![Subject](https://user-images.githubusercontent.com/34621693/183362979-cb3ab661-6e6d-4678-b498-23b4157b1a2e.jpeg)
 호출 구조 : Client(Proxy).operation() —> Proxy(RealSubject).operation() —> RealSubject.operation()
 
 프록시 패턴의 핵심은 RealSubject 코드와 클라이언트 코드를 전혀 변경하지 않고, 프록시를 도입해서 접근 제어를 했다는 점이다. 그리고 클라이언트 코드의 변경 없이 자유롭게 프록시를 넣고 뺄 수 있다. 실제 클라이언트 입장에서는 프록시 객체가 주입되었는지, 실제 객체가 주입되었는지 알지 못한다. 
 
 ### 데코레이터 패턴
-￼
+![Component](https://user-images.githubusercontent.com/34621693/183363059-f70d53ca-f7bd-41aa-b4a6-63cdd3b8dc43.jpeg)
 호출 구조 : Client(TimeDecorator).operation() —> TimeDecorator().operation(MessageDecorator) —> MessageDecorator(RealComponent).operation() —> RealComponent.operation()
 ** 프록시 패턴은 체이닝이 가능하다. (부가기능을 추가할 수 있다.)
 
@@ -134,7 +134,7 @@ Decorator 라는 추상 클래스를 만들어야 데코레이터 패턴일까?
 
 
 ### JDK 동적 프록시
-￼
+![$proxy1](https://user-images.githubusercontent.com/34621693/183363139-32eeb1e6-264b-41fb-8078-1b8dda47f774.jpeg)
 동적 프록시 기술을 사용하면 개발자가 직접 프록시 클래스를 만들지 않아도 된다. 
 이름 그대로 프록시 객체를 동적으로 런타임에 개발자 대신 만들어준다. 그리고 동적 프록시에 원하는 실행 로직을 지정할 수 있다. 
 JDK 동적 프록시는 인터페이스를 기반으로 프록시를 동적으로 만들어준다. 따라서 인터페이스가 필수이다.
@@ -173,22 +173,12 @@ CGLIB 제약 클래스 기반 프록시는 상속을 사용하기 때문에 �
 
 
 ### 프록시 팩토리
-￼
+![jdk proxy](https://user-images.githubusercontent.com/34621693/183363171-78b15531-662f-41e1-908e-8da7ce0d4836.jpeg)
 프록시 팩토리는 인터페이스가 있으면 JDK 동적 프록시를 사용하고, 구체 클래스만 있다면 CGLIB를 사용한다. 
-
-Q: 두 기술을 함께 사용할 때 부가 기능을 적용하기 위해 JDK 동적 프록시가 제공하는 InvocationHandler와 CGLIB가 제공하는 MethodInterceptor를 각각 중복으로 따로 만들어야 할까?
-￼
-스프링은 이 문제를 해결하기 위해 부가 기능을 적용할 때 Advice 라는 새로운 개념을 도입했다. 개발자는 InvocationHandler 나 MethodInterceptor 를 신경쓰지 않고, Advice 만 만들면 된다. 결과적으로 InvocationHandler 나 MethodInterceptor 는 Advice 를 호출하게 된다. 프록시 팩토리를 사용하면 Advice 를 호출하는 전용 InvocationHandler , MethodInterceptor 를 내부에서 사용한다. 
-Advice는 프록시가 제공하는 부가 기능 로직이다. (ex : LogAdvice 등..)
-
-Q: 특정 조건에 맞을 때 프록시 로직을 적용하는 기능도 공통으로 제공되었으면? 앞서 특정 메서드 이름의 조건에 맞을 때만 프록시 부가 기능이 적용되는 코드를 직접 만들었다. 스프링은 Pointcut 이라는 개념을 도입해서 이 문제를 일관성 있게 해결한다. 
-
-Q: 인터페이스가 있어도 CGLIB를 사용하고 싶다면?
-proxyFactory.setProxyTargetClass(true);//프록시팩토리를 만들 때 타겟 클래스(구체 클래스)로 만들고 싶은 경우(CGLIB 사용) true를 준다.
 
 
 ### 포인트컷, 어드바이스, 어드바이저 
-￼
+![스프링 핵심 원리 심화편](https://user-images.githubusercontent.com/34621693/183363241-b4bce363-4ee5-454e-a1a5-54d7336c7f90.jpeg)
 1. 클라이언트가 프록시의 save() 를 호출한다. 
 2. 포인트컷에 Service 클래스의 save() 메서드에 어드바이스를 적용해도 될지 물어본다. 
 3. 포인트컷이 true 를 반환한다. 따라서 어드바이스를 호출해서 부가 기능을 적용한다. 
@@ -201,7 +191,7 @@ proxyFactory.setProxyTargetClass(true);//프록시팩토리를 만들 때 타겟
 * 둘을 합치면 어드바이저가 된다. 스프링의 어드바이저는 하나의 포인트컷 + 하나의 어드바이스로 구성된다. 
 
 중요
-￼
+![advisors](https://user-images.githubusercontent.com/34621693/183363253-37e7fa1b-2f05-4274-b275-38485ed5a294.png)
 스프링의 AOP를 처음 공부하거나 사용하면, AOP 적용 수 만큼 프록시가 생성된다고 착각하게 된다. 
 스프링은 AOP를 적용할 때, 최적화를 진행해서 지금처럼 프록시는 하나만 만들고, 하나의 프록시에 여러 어드바이저를 적용한다.  정리하면 하나의 target 에 여러 AOP가 동시에 적용되어도, 스프링의 AOP는 target 마다 하나의 프록시만 생성한다. 이부분을 꼭 기억해두자. 
 
@@ -259,7 +249,7 @@ execution([리턴 타입] [패키지] [클래스] [메소드] [매게 변수])
 
 
 ### 빈 후처리기 - BeanPostProcessor
-￼
+![page2image26022384](https://user-images.githubusercontent.com/34621693/183363282-33588704-1887-48f4-aaae-9e7294d68cb3.png)
 1. 생성: 스프링 빈 대상이 되는 객체를 생성한다. ( @Bean , 컴포넌트 스캔 모두 포함) 2. 전달: 생성된 객체를 빈 저장소에 등록하기 직전에 빈 후처리기에 전달한다. 3. 후 처리 작업: 빈 후처리기는 전달된 스프링 빈 객체를 조작하거나 다른 객체로 바뀌치기 할 수 있다. 
 4. 등록: 빈 후처리기는 빈을 반환한다. 전달 된 빈을 그대로 반환하면 해당 빈이 등록되고, 바꿔치기 하면 다른 객체가 빈 저장소에 등록된다. 
 
@@ -275,7 +265,7 @@ postProcessBeforeInitialization : 객체 생성 이후에 @PostConstruct 같은 
 
 
 ### 자동 프록시 생성기 - AutoProxyCreator
-￼
+![pointcut](https://user-images.githubusercontent.com/34621693/183363308-ccefde48-0048-4e4c-b1b6-9552e5a34cfa.png)
  자동 프록시 생성기의 작동 과정을 알아보자 1. 생성: 스프링이 스프링 빈 대상이 되는 객체를 생성한다. ( @Bean , 컴포넌트 스캔 모두 포함) 2. 전달: 생성된 객체를 빈 저장소에 등록하기 직전에 빈 후처리기에 전달한다. 3. 모든 Advisor 빈 조회: 자동 프록시 생성기 - 빈 후처리기는 스프링 컨테이너에서 모든 Advisor(return type이 Advisor) 를 조회한다. 4. 프록시 적용 대상 체크: 앞서 조회한 Advisor 에 포함되어 있는 포인트컷을 사용해서 해당 객체가 프록시를 적용할 대상인지 아닌지 판단한다. 
 이때 객체의 클래스 정보는 물론이고, 해당 객체의 모든 메서드를 포인트컷에 하나하나 모두 매칭해본다. 
 그래서 조건이 하나라도 만족하면 프록시 적용 대상이 된다. 예를 들어서 10개의 메서드 중에 하나만 포인트컷 조건에 만족해도 프록시 적용 대상이 된다. 5. 프록시 생성: 프록시 적용 대상이면 프록시를 생성하고 반환해서 프록시를 스프링 빈으로 등록한다. 만약 프록시 적용 대상이 아니라면 원본 객체를 반환해서 원본 객체를 스프링 빈으로 등록한다. 6. 빈 등록: 반환된 객체는 스프링 빈으로 등록된다. 
@@ -286,8 +276,9 @@ Advisor 안에는 Pointcut 과 Advice 가 이미 모두 포함되어 있다.
 
 자동 프록시 생성기는 2가지 일을 한다.
 1. @Aspect 를 보고 어드바이저( Advisor )로 변환해서 저장한다. (사전에 스프링 컨테이너 빈으로 등록되어 있어야 한다.)
-￼
-@Aspect를 어드바이저로 변환해서 저장하는 과정을 알아보자 1. 실행: 스프링 애플리케이션 로딩 시점에 자동 프록시 생성기를 호출한다. 
+![advisor](https://user-images.githubusercontent.com/34621693/183363367-41682220-b384-4c59-b154-83ed7f032e5a.jpeg)
+@Aspect를 어드바이저로 변환해서 저장하는 과정
+1. 실행: 스프링 애플리케이션 로딩 시점에 자동 프록시 생성기를 호출한다. 
 2. 모든 @Aspect 빈 조회: 자동 프록시 생성기는 스프링 컨테이너에서 @Aspect 애노테이션이 붙은 스프링 빈을 모두 조회한다. 3. 어드바이저 생성: @Aspect 어드바이저 빌더를 통해 @Aspect 애노테이션 정보를 기반으로 어드바이저를 생성한다. 
 4. @Aspect 기반 어드바이저 저장: 생성한 어드바이저를 @Aspect 어드바이저 빌더 내부에 저장한다. 
 
@@ -298,15 +289,16 @@ Advisor 안에는 Pointcut 과 Advice 가 이미 모두 포함되어 있다.
 
 
 2. 어드바이저를 기반으로 프록시를 생성한다. 
-￼
-자동 프록시 생성기의 작동 과정을 알아보자 1. 생성: 스프링 빈 대상이 되는 객체를 생성한다. ( @Bean , 컴포넌트 스캔 모두 포함) 2. 전달: 생성된 객체를 빈 저장소에 등록하기 직전에 빈 후처리기에 전달한다. 3-1. Advisor 빈 조회: 스프링 컨테이너에서 Advisor 빈을 모두 조회한다. 3-2. @Aspect Advisor 조회: @Aspect 어드바이저 빌더 내부에 저장된 Advisor 를 모두 조회한다. 
+![pointcut](https://user-images.githubusercontent.com/34621693/183363400-051e7117-e1fc-4c80-95d5-941e898dff62.jpeg)
+자동 프록시 생성기의 작동 과정
+1. 생성: 스프링 빈 대상이 되는 객체를 생성한다. ( @Bean , 컴포넌트 스캔 모두 포함) 2. 전달: 생성된 객체를 빈 저장소에 등록하기 직전에 빈 후처리기에 전달한다. 3-1. Advisor 빈 조회: 스프링 컨테이너에서 Advisor 빈을 모두 조회한다. 3-2. @Aspect Advisor 조회: @Aspect 어드바이저 빌더 내부에 저장된 Advisor 를 모두 조회한다. 
 4. 프록시 적용 대상 체크: 앞서 3-1, 3-2에서 조회한 Advisor 에 포함되어 있는 포인트컷을 사용해서 해당 객체가 프록시를 적용할 대상인지 아닌지 판단한다. 
 이때 객체의 클래스 정보는 물론이고, 해당 객체의 모든 메서드를 포인트컷에 하나하나 모두 매칭해본다. 그래서 조건이 하나라도 만족하면 프록시 적용 대상이 된다. 
 예를 들어서 메서드 하나만 포인트컷 조건에 만족해도 프록시 적용 대상이 된다. 5. 프록시 생성: 프록시 적용 대상이면 프록시를 생성하고 프록시를 반환한다. 그래서 프록시를 스프링 빈으로 등록한다. 만약 프록시 적용 대상이 아니라면 원본 객체를 반환해서 원본 객체를 스프링 빈으로 등록한다. 6. 빈 등록: 반환된 객체는 스프링 빈으로 등록된다. 
 
 
 ### @Aspect 
-￼
+![public class LogTraceAspect](https://user-images.githubusercontent.com/34621693/183363438-ada9ea1c-a4c0-4515-9133-6d4fd34e00fe.png)
 1. @Aspect : 애노테이션 기반 프록시를 적용할 때 필요하다. 
 2. @Around("execution(* hello.proxy.app..*(..))") 
     * @Around 의 값에 포인트컷 표현식을 넣는다. 표현식은 AspectJ 표현식을 사용한다. 
@@ -331,7 +323,7 @@ AOP는 지금까지 학습한 메서드 실행 위치 뿐만 아니라 다음과
 
 
 ### AOP 용어
-￼
+![orderService](https://user-images.githubusercontent.com/34621693/183363478-bc89aabb-03cb-40da-ade6-c33977953287.jpeg)
 조인 포인트(Join point)
 * 어드바이스가 적용될 수 있는 위치, 메소드 실행, 생성자 호출, 필드 값 접근, static 메서드 접근 같은 프로그램 실행 중 지점
 * 조인 포인트는 추상적인 개념이다. AOP를 적용할 수 있는 모든 지점이라 생각하면 된다.
