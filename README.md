@@ -1,9 +1,4 @@
 # 스프링 핵심 원리 심화편 정리
-### ThreadLocal
-크게 3가지 함수가 있다. set(), get(), remove()</br>
-쓰레드로컬은 동시성 문제를 해결할 수 있지만 사용 후 remove()를 하지 않으면 쓰레드풀을 사용할 시 전에 쓰던 데이터가 남아있기 때문에 큰 문제가 될 수 있다.
-
-
 ### 템플릿 메서드 패턴
 <img width="592" alt="AbstractTemplate" src="https://user-images.githubusercontent.com/34621693/183357022-a0d0ba42-b0f9-4fac-89db-93d95552efbb.png">
 변하는 것과 변하지 않는 것을 분리. 좋은 설계는 변하는 것과 변하지 않는 것을 분리하는 것이다.</br>
