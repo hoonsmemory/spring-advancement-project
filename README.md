@@ -1,4 +1,8 @@
 # 스프링 핵심 원리 심화편 정리
+
+[스프링AOP - 실무 주의사항](https://hoonsmemory.tistory.com/11)
+
+
 ### 템플릿 메서드 패턴
 <img width="592" alt="AbstractTemplate" src="https://user-images.githubusercontent.com/34621693/183357022-a0d0ba42-b0f9-4fac-89db-93d95552efbb.png">
 변하는 것과 변하지 않는 것을 분리. 좋은 설계는 변하는 것과 변하지 않는 것을 분리하는 것이다.</br>
